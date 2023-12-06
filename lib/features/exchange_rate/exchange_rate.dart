@@ -76,7 +76,7 @@ class _ExchangeRatePageState extends State<ExchangeRatePage>
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     child: Text(
-                      'para cambiar dolares y soles online en Perú',
+                      'para cambiar dólares y soles online en Perú',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -96,7 +96,7 @@ class _ExchangeRatePageState extends State<ExchangeRatePage>
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Text('Dolar compra'),
+                        Text('Dólar compra'),
                         Text(
                           purchase_price,
                           style: TextStyle(fontWeight: FontWeight.w700),
@@ -111,7 +111,7 @@ class _ExchangeRatePageState extends State<ExchangeRatePage>
                     padding: EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Text('Dolar venta'),
+                        Text('Dólar venta'),
                         Text(
                           sale_price,
                           style: TextStyle(fontWeight: FontWeight.w700),

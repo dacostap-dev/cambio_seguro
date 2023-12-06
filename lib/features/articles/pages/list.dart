@@ -1,5 +1,6 @@
 import 'package:cambio_seguro_demo/core/constants/constant_color.dart';
 import 'package:cambio_seguro_demo/features/articles/bloc/article_bloc.dart';
+import 'package:cambio_seguro_demo/features/articles/widgets/article.dart';
 import 'package:cambio_seguro_demo/features/articles/widgets/banner.dart';
 
 import 'package:flutter/material.dart';
@@ -37,8 +38,11 @@ class _InfiniteScrollPageState extends State<InfiniteScrollPage> {
   onScroll() {
     if (_scrollController.hasClients) {
       final maxScroll = _scrollController.position.maxScrollExtent;
-
       final currentScroll = _scrollController.position.pixels;
+
+      // print('maxScroll: $maxScroll');
+      // print('currentScroll: $currentScroll');
+
       if (maxScroll == currentScroll) {
         print('load-more');
         context.read<ArticleBloc>().add(ArticleEvent.doGetArticles());
@@ -83,31 +87,33 @@ class _InfiniteScrollPageState extends State<InfiniteScrollPage> {
                 banner: final banner,
                 articles: final articles,
               ) =>
-                Container(
-                  child: Column(
-                    children: [
-                      BannerWidget(
-                        title: banner.title,
-                        imageUrl: banner.urlImage,
+                CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: BannerWidget(banner: banner),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Divider(
+                        color: Colors.grey.shade300,
+                        thickness: 1,
+                        indent: 25,
+                        endIndent: 25,
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: state.hasReachedMax
-                              ? articles.length
-                              : articles.length + 1,
-                          itemBuilder: (context, index) {
-                            return index >= articles.length
-                                ? const BottomLoader()
-                                : BannerWidget(
-                                    title: articles[index].title,
-                                    imageUrl: articles[index].urlImage,
-                                  );
-                          },
-                        ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return index >= articles.length
+                              ? const BottomLoader()
+                              : ArticleWidget(article: articles[index]);
+                        },
+                        childCount: state.hasReachedMax
+                            ? articles.length
+                            : articles.length + 1,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ArticleLoading() => const Center(
                   child: CircularProgressIndicator(),

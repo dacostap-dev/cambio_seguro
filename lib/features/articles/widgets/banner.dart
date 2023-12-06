@@ -1,14 +1,13 @@
 import 'package:cambio_seguro_demo/features/widgets/custom_cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cambio_seguro_demo/domain/models/banner.dart' as banner_model;
 
 class BannerWidget extends StatelessWidget {
-  final String title;
-  final String imageUrl;
+  final banner_model.Banner banner;
 
   const BannerWidget({
     super.key,
-    required this.title,
-    required this.imageUrl,
+    required this.banner,
   });
 
   @override
@@ -19,7 +18,7 @@ class BannerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '!Nuevo articulo!',
+            '!Nuevo artículo!',
             style: TextStyle(
               color: Color(0xfff7ac17),
               fontWeight: FontWeight.w600,
@@ -27,7 +26,7 @@ class BannerWidget extends StatelessWidget {
             ),
           ),
           Text(
-            title,
+            banner.title,
             style: const TextStyle(
               color: Color(0xff1f295c),
               fontWeight: FontWeight.w700,
@@ -36,7 +35,7 @@ class BannerWidget extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           CustomCachedNetworkImage(
-            imageUrl: imageUrl,
+            imageUrl: banner.urlImage,
             height: 200,
             width: double.infinity,
           )
