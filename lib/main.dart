@@ -1,8 +1,23 @@
 import 'package:cambio_seguro_demo/core/router.dart';
+import 'package:cambio_seguro_demo/data/repositories/articles_respository_impl.dart';
+import 'package:cambio_seguro_demo/domain/repositories/articles_repository.dart';
+import 'package:cambio_seguro_demo/features/articles/bloc/article_bloc.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    RepositoryProvider<ArticlesRepository>(
+      create: (context) => ArticlesRepositoryImpl(),
+      child: BlocProvider(
+        create: (context) => ArticleBloc(
+          context.read(),
+        ),
+        child: const MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

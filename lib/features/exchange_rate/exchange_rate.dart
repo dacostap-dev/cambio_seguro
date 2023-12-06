@@ -1,15 +1,15 @@
 import 'package:cambio_seguro_demo/core/constants/constant_color.dart';
-import 'package:cambio_seguro_demo/presentation/widgets/input_widget.dart';
+import 'package:cambio_seguro_demo/features/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ExchangeRatePage extends StatefulWidget {
+  const ExchangeRatePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ExchangeRatePage> createState() => _ExchangeRatePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _ExchangeRatePageState extends State<ExchangeRatePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 

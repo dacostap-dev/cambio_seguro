@@ -1,0 +1,145 @@
+import 'package:cambio_seguro_demo/core/constants/constant_color.dart';
+import 'package:cambio_seguro_demo/features/articles/bloc/article_bloc.dart';
+import 'package:cambio_seguro_demo/features/articles/widgets/banner.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class InfiniteScrollPage extends StatefulWidget {
+  const InfiniteScrollPage({super.key});
+
+  @override
+  State<InfiniteScrollPage> createState() => _InfiniteScrollPageState();
+}
+
+class _InfiniteScrollPageState extends State<InfiniteScrollPage> {
+  final _scrollController = ScrollController();
+  // final _scrollThreshold = 200.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ArticleBloc>().add(ArticleEvent.doGetArticles());
+    });
+
+    _scrollController.addListener(onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  onScroll() {
+    if (_scrollController.hasClients) {
+      final maxScroll = _scrollController.position.maxScrollExtent;
+
+      final currentScroll = _scrollController.position.pixels;
+      if (maxScroll == currentScroll) {
+        print('load-more');
+        context.read<ArticleBloc>().add(ArticleEvent.doGetArticles());
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: BlocListener<ArticleBloc, ArticleState>(
+      listener: (context, state) {
+        (switch (state) {
+          ArticleLoadFailed(message: final message) =>
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            ),
+          _ => null,
+        });
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Cambio Seguro',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          backgroundColor: ConstantColor.kPrimary,
+          foregroundColor: Colors.white,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.menu),
+            )
+          ],
+        ),
+        body: BlocBuilder<ArticleBloc, ArticleState>(
+          builder: (context, state) {
+            return switch (state) {
+              ArticleLoaded(
+                banner: final banner,
+                articles: final articles,
+              ) =>
+                Container(
+                  child: Column(
+                    children: [
+                      BannerWidget(
+                        title: banner.title,
+                        imageUrl: banner.urlImage,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: state.hasReachedMax
+                              ? articles.length
+                              : articles.length + 1,
+                          itemBuilder: (context, index) {
+                            return index >= articles.length
+                                ? const BottomLoader()
+                                : BannerWidget(
+                                    title: articles[index].title,
+                                    imageUrl: articles[index].urlImage,
+                                  );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ArticleLoading() => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ArticleLoadFailed(message: final message) => Center(
+                  child: Text(message),
+                ),
+              _ => const SizedBox.shrink(),
+            };
+          },
+        ),
+      ),
+    ));
+  }
+}
+
+class BottomLoader extends StatelessWidget {
+  const BottomLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: const Center(
+        child: SizedBox(
+          width: 33,
+          height: 33,
+          child: CircularProgressIndicator(
+            strokeWidth: 1.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
