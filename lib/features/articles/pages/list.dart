@@ -2,6 +2,7 @@ import 'package:cambio_seguro_demo/core/constants/constant_color.dart';
 import 'package:cambio_seguro_demo/features/articles/bloc/article_bloc.dart';
 import 'package:cambio_seguro_demo/features/articles/widgets/article.dart';
 import 'package:cambio_seguro_demo/features/articles/widgets/banner.dart';
+import 'package:cambio_seguro_demo/features/articles/widgets/bottom_loader.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,8 +116,18 @@ class _InfiniteScrollPageState extends State<InfiniteScrollPage> {
                     ),
                   ],
                 ),
-              ArticleLoading() => const Center(
-                  child: CircularProgressIndicator(),
+              ArticleLoading() => CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        List.generate(
+                          10,
+                          (int index) => const ArticleSkeleton(),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ArticleLoadFailed(message: final message) => Center(
                   child: Text(message),
@@ -127,25 +138,5 @@ class _InfiniteScrollPageState extends State<InfiniteScrollPage> {
         ),
       ),
     ));
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  const BottomLoader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: const Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
-        ),
-      ),
-    );
   }
 }

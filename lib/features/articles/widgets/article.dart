@@ -2,6 +2,7 @@ import 'package:cambio_seguro_demo/domain/models/article.dart';
 import 'package:cambio_seguro_demo/features/widgets/custom_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 class ArticleWidget extends StatelessWidget {
   final Article article;
@@ -57,5 +58,114 @@ class ArticleWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ArticleSkeleton extends StatelessWidget {
+  const ArticleSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SkeletonAnimation(
+                  shimmerColor: Colors.grey,
+                  borderRadius: BorderRadius.circular(20),
+                  shimmerDuration: 1000,
+                  child: Container(
+                    height: 8,
+                    width: 12,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                SkeletonAnimation(
+                  shimmerColor: Colors.grey,
+                  borderRadius: BorderRadius.circular(20),
+                  shimmerDuration: 1000,
+                  child: Container(
+                    height: 8,
+                    width: constraints.maxWidth * 0.25,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            SkeletonAnimation(
+              shimmerColor: Colors.grey,
+              borderRadius: BorderRadius.circular(20),
+              shimmerDuration: 1000,
+              child: Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SkeletonAnimation(
+              shimmerColor: Colors.grey,
+              borderRadius: BorderRadius.circular(20),
+              shimmerDuration: 1000,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    height: 6,
+                    width: constraints.maxWidth / 3,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      );
+    });
   }
 }
